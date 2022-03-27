@@ -1,0 +1,49 @@
+*{
+  /* box-sizing: border-box; */
+}
+
+body {
+  margin: 1em;
+  /* display: flex; */
+  /* min-height: 100vh;
+  flex-direction: column; */
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+header h1{
+  text-align: center;
+}
+
+/* :root {
+  --primary: #44e9ff;
+  --secondary: #497980;
+  --tertiary: rgb(192, 246, 253);
+  --grey: #333;
+  font-size: 62.5%;
+} */
+
+button{
+  background-color: blueviolet; 
+  border: none;
+  color: white;
+  margin-bottom: .5em;
+  padding: 10px 20px;
+  text-decoration: none;
+  display: block;
+  font-size: 18px;
+  width: 200px;
+}
+
+button:hover{
+  background-color: violet; 
+}
+
+#choices-container{
+  margin-bottom: 3em;
+}
+
+#answer-container{
+  color: gray;
+  font-size: 18px;
+  text-align: center;
+}
