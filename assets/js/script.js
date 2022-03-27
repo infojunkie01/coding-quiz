@@ -1,3 +1,4 @@
+// Data for questions, choices, and answers
 const questions = [
 	{
 		question: "Commonly used data types do not include:",
@@ -40,7 +41,7 @@ const questions = [
 		answer: "quotes",
   },
 	{
-		question: "A very useful tool used during development and debuggin for printing content to the debugger is:",
+		question: "A very useful tool used during development and debugging for printing content to the debugger is:",
 		choices: [
 			"JavaScript",
 			"terminal/bash",
@@ -51,13 +52,18 @@ const questions = [
 	}
 ];
 
+// Variables for selector
 buttonStart = document.querySelector('#button-start');
-
 title = document.querySelector('#title');
 container = document.querySelector('#main-container');
 choicesContainer = document.querySelector('#choices-container');
+answerContainer = document.querySelector('#answer-container');
+
+score = 0;
+count = 0;
 
 
+// Create buttons for choices for each question
 function createChoices(count){
   title.textContent = questions[count].question;
   choicesContainer.innerHTML = '';
@@ -70,23 +76,44 @@ function createChoices(count){
   }
 }
 
-count = 0;
-// if start clicked, move onto next question
+// Show final page when quiz end
+function finalPage(){
+	choicesContainer.innerHTML = '';
+	title.textContent = "All done!";
+
+	finalScore = document.createElement('p');
+	finalScore.textContent = "Your final score is " + score;
+	choicesContainer.appendChild(finalScore); 
+
+	saveScore = document.createElement('p');
+	saveScore.textContent = "Enter initials: " ;
+	choicesContainer.appendChild(saveScore); 
+}
+
+
+
+
+// When start button is clicked, present first question and start timer
 buttonStart.addEventListener("click", function() {
 	buttonStart.remove()
     createChoices(count)
-
-  // if (count < questions.length){
-  //   title.textContent = questions[count].question;
-  //   createChoices(count)
-
-  //   //if one of choices selected, change to next (use if child selected)
-  // }
-
+	setInterval(timer, 1000); //1000 will  run it every 1 second
 });
 
 
-answerContainer = document.querySelector('#answer-container');
+
+// Function for timer
+var timerCount = 76;
+	
+function timer(){
+	timerCount = timerCount-1;
+	if (timerCount < 0){
+		finalPage()
+		return;
+	}
+	document.getElementById("timer").innerHTML= timerCount + " sec."; // watch for spelling
+}
+
 
 // Gives answer result
 function answerResult(feedback){
@@ -102,14 +129,17 @@ var choiceHandler = function(event) {
 	answerContainer.innerHTML = '';
 	if (targetButton.textContent == questions[count-1].answer) {
 		createChoices(count)
-		answerResult("Correct!")		
+		answerResult("Correct!")
+		score++		
 
 	}else{
-		createChoices(count)
+		createChoices(count);
+		timerCount = timerCount - 10; // Subtract time if answer is wrong
 		answerResult("Wrong")	
 	}
 	
   };
+
 
 choicesContainer.addEventListener("click", choiceHandler);
 
@@ -129,171 +159,6 @@ choicesContainer.addEventListener("click", choiceHandler);
 //   };
 
 
-function myFunc(){
-	choices = document.getElementById('main-container').children;
-	
-	console.log(choices)
-  
-	for(choice in choices){
-		console.log(choice)
-		choice.addEventListener("click", function() { console.log("hi")});
-	}
-
-	// for (i = 0; i < choices.length; i++) {
-	// 	choices[i].addEventListener("click", function() {
-	// 	console.log(i)
-	// 	if(choices[i].textContent == questions[count].answer) {
-	// 		console.log("true")
-	// 		//switch to next count
-	// 		// if it's right do X, if wrong do Y
-	// 	} else{
-	// 		console.log("wrong")
-	// 	}
-	// 	});
-	// };
-  }
-  
-
-// function myFunc(){
-//   //var choices = document.getElementsByClassName('button-choice');
-//   choices = document.querySelector('#choice0');
-// 	console.log(choices.textContent)
-
-//   if(choices.textContent == questions[count].answer) {
-//     console.log("true")
-//     //switch to next count
-//     // if it's right do X, if wrong do Y
-//   }
-// }
-
-
-
-// choices[0].addEventListener("click", function() {
-//   console.log(0)
-//   if(choices[0].textContent == questions[count].answer) {
-//     console.log("true")
-//     //switch to next count
-//     // if it's right do X, if wrong do Y
-//   } else{
-//     console.log("wrong")
-//   }
-// });
-
-// for (i = 0; i < choices.length; i++) {
-//   console.log(choices[i])
-//   choices[i].addEventListener('click', function() {
-//     console.log(i)
-//     if(choices[i].textContent == questions[count].answer) {
-//       console.log("true")
-//       //switch to next count
-//       // if it's right do X, if wrong do Y
-//     } else{
-//       console.log("wrong")
-//     }
-// });
- 
-// };
-
-// (
-// 	function(){
-// 		const main = document.querySelector('main'),
-// 					container = document.querySelector('#container-question'),
-// 					pMsg = document.querySelector('#p-msg'),
-// 					play = document.querySelector('#btn-play');
-// 		let point;
-// 		let count;
-// 		point = 0;
-// 		count = 0;
-		
-// 		main.addEventListener('click', (e) => {
-// 			printQuestion(e);
-// 			confirmAlternative(e);
-// 			checked(e)
-// 		});
-		
-// 		function printQuestion (e) {
-// 			if(e.target.id === 'btn-play' || e.target.id === 'next-question'){
-// 				if(questions.length === count){
-// 				pMsg.textContent = 'Sua Pontuação: ';
-// 				container.innerHTML = '';
-				
-// 				let p = document.createElement('p');
-// 						p.textContent = point;
-// 				container.appendChild(p)
-// 			}	
-// 				newQuestion();
-// 			}
-// 		}
-		
-// 		function confirmAlternative (e) {
-// 			if(e.target.id === 'btn-confirm'){
-// 				showAlternative();
-// 			}
-// 		}
-		
-// 		function checked (e) {
-// 			if(e.target.nodeName === "LABEL"){
-// 				document.querySelector('#btn-confirm').disabled = false;
-// 			}
-// 		} 
-		
-// 		function newQuestion () {
-// 			pMsg.textContent = questions[count].question;
-// 			container.innerHTML = '';
-
-// 			questions[count].choices.forEach((item, index) => {
-// 				for(let key in item){
-// 					let input = document.createElement('input');
-// 						input.id = key
-// 						input.setAttribute('type', 'radio');
-// 						input.setAttribute('name', 'question');
-// 						container.appendChild(input);
-// 					let label = document.createElement('label');
-// 						label.innerHTML = item[key];
-// 						label.setAttribute('for', key);
-// 						container.appendChild(label);
-// 				}
-// 			});
-			
-// 			let button = document.createElement('button');
-// 					button.textContent = 'Confirmar';
-// 					button.id = 'btn-confirm';
-// 					button.disabled = true;
-// 					container.appendChild(button);
-// 			count += 1;
-// 		}
-		
-// 		function addPoint () {
-// 			point += 1;
-// 		}
-		
-// 		function showAlternative () {
-// 			let choices = document.querySelectorAll('input[type="radio"]');
-// 			let checked = choices.forEach(item => {
-// 				if(item.checked === true){
-// 					container.innerText = '';
-// 					let p = document.createElement('p')
-// 					if(item.id === questions[count - 1].answer){
-// 						addPoint();
-// 						pMsg.innerHTML  = 'Parabens você acertou!'
-// 						p.innerHTML = `Resposta Correta: ${questions[count - 1].answer.toUpperCase()} <br><br>
-// 						${questions[count - 1].info}`					
-// 					} else {
-// 						pMsg.innerHTML  = 'Que pena você errou!'
-// 						p.innerHTML = `Resposta Correta: ${questions[count - 1].answer.toUpperCase()} <br><br>
-// 						${questions[count - 1].info}`
-// 					}
-// 					container.appendChild(p);
-					
-// 					let button = document.createElement('button');
-// 							button.textContent = 'Próxima Questão';
-// 							button.id = 'next-question';
-// 					container.appendChild(button);
-// 				}
-// 			});
-// 		}
-// 	}
-// )()
 
 
 
