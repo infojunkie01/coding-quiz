@@ -10,23 +10,43 @@
   <body>
    
       <header>
-        <p>View high scores</p>
-        <p>Time: <span id="timer"></span></p>
+        <nav>
+          <p id="view-scores">View high scores</p>
+          <p id="view-time">Time: <span id="timer"></span></p>
+        </nav>
         <h1 id="title">Coding quiz challenge</h1>
+        <button id="button-start" >Start</button>
       </header>
 
       <main>
         <div id="main-container">
-          <button class="button" id="button-start" >Start</button>
+          
           <div id="choices-container"></div>
+
+          <div id="scores-form-container">
+            <h3>Your final score is <span id="print-score"></span></h3>
+            <form id="score-form">
+              <div class="form-group">
+                <h3>Enter initials: <span><input type="text" name="task-name" placeholder="Enter Task Name" /> <button id="save-score" type="submit">Submit</button></span></h3>
+              </div>
+            </form>
+          </div>
+
+          <div id="scores-container">
+            <ul id="scores-list"></ul>
+            <button id="button-go-back">Go back</button>
+            <button id="button-clear-scores">Clear high scores</button>
+          </div>
+          
           <div id="answer-container"></div>
         </div>
+
+        
+
+
       </main>
 
-      <!-- <div class="form-group">
-        <button class="btn" id="save-task" type="submit">Add Task</button>
-      </div>
-    -->
+
     <script src="./assets/js/script.js"></script>
   </body>
 

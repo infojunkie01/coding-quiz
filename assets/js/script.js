@@ -58,6 +58,11 @@ title = document.querySelector('#title');
 container = document.querySelector('#main-container');
 choicesContainer = document.querySelector('#choices-container');
 answerContainer = document.querySelector('#answer-container');
+scoresFormContainer = document.querySelector('#scores-form-container');
+printScore = document.querySelector('#print-score');
+scoresContainer = document.querySelector('#scores-container');
+scoresList = document.querySelector('#scores-list');
+scoreForm = document.querySelector("#score-form");
 
 score = 0;
 count = 0;
@@ -80,18 +85,9 @@ function createChoices(count){
 function finalPage(){
 	choicesContainer.innerHTML = '';
 	title.textContent = "All done!";
-
-	finalScore = document.createElement('p');
-	finalScore.textContent = "Your final score is " + score;
-	choicesContainer.appendChild(finalScore); 
-
-	saveScore = document.createElement('p');
-	saveScore.textContent = "Enter initials: " ;
-	choicesContainer.appendChild(saveScore); 
+	printScore.textContent = score;
+	scoresFormContainer.style.display = "block";
 }
-
-
-
 
 // When start button is clicked, present first question and start timer
 buttonStart.addEventListener("click", function() {
@@ -100,9 +96,7 @@ buttonStart.addEventListener("click", function() {
 	setInterval(timer, 1000); //1000 will  run it every 1 second
 });
 
-
-
-// Function for timer
+// Sets up timer
 var timerCount = 76;
 	
 function timer(){
@@ -110,10 +104,13 @@ function timer(){
 	if (timerCount < 0){
 		finalPage()
 		return;
+	} else if (count == questions.length){
+		clearInterval(timer);
+		document.getElementById("timer").innerHTML= "0 sec."; // watch for spelling
+		return;
 	}
-	document.getElementById("timer").innerHTML= timerCount + " sec."; // watch for spelling
+	document.getElementById("timer").innerHTML = timerCount + " sec."; // watch for spelling
 }
-
 
 // Gives answer result
 function answerResult(feedback){
@@ -126,39 +123,76 @@ function answerResult(feedback){
 var choiceHandler = function(event) {
 	var targetButton = event.target;
 	count++
-	answerContainer.innerHTML = '';
-	if (targetButton.textContent == questions[count-1].answer) {
-		createChoices(count)
-		answerResult("Correct!")
-		score++		
-
+	console.log(count)
+	if (count < questions.length){
+		answerContainer.innerHTML = '';
+		if (targetButton.textContent == questions[count-1].answer) {
+			createChoices(count);
+			answerResult("Correct!");
+			score++			
+		}else{
+			createChoices(count);
+			timerCount = timerCount - 10; // Subtract time if answer is wrong
+			answerResult("Wrong");
+		};
 	}else{
-		createChoices(count);
-		timerCount = timerCount - 10; // Subtract time if answer is wrong
-		answerResult("Wrong")	
+		if (targetButton.textContent == questions[count-1].answer) {
+			answer.innerHTML = '';
+			answerResult("Correct!");
+			score++		
+		}else{
+			answer.innerHTML = '';
+			answerResult("Wrong")	
+		};
+		finalPage();
 	}
-	
   };
 
 
 choicesContainer.addEventListener("click", choiceHandler);
 
-//   var taskButtonHandler = function (event) {
-// 	// get target element from event
-// 	var targetEl = event.target;
+///
+
+var scoreSaver = function (event) {
+  event.preventDefault();
+  scoreName = document.querySelector("input[name='task-name']").value;
+ 
+  if (!scoreName) {
+    alert("You need to fill out your name first!");
+    return false;
+  }
+
+  var dataObj = {
+	name: scoreName,
+	score: score
+	};
+
+  title.textContent = "High scores"
+  scoresFormContainer.style.display = "none";
+  answerContainer.style.display = "none";
+  scoresContainer.style.display = "block";
   
-// 	if (targetEl.matches(".edit-btn")) {
-// 	  console.log("edit", targetEl);
-// 	  var taskId = targetEl.getAttribute("data-task-id");
-// 	  editTask(taskId);
-// 	} else if (targetEl.matches(".delete-btn")) {
-// 	  console.log("delete", targetEl);
-// 	  var taskId = targetEl.getAttribute("data-task-id");
-// 	  deleteTask(taskId);
-// 	}
-//   };
+  createScore(dataObj)
+};
 
+var scores = [];
 
+var createScore = function(dataObj) {
+	var scoreItem = document.createElement("li");
+	scoreItem.className = "score-info";
+	scoreItem.innerHTML = "<p>" + dataObj.name + " - " + dataObj.score + "</p>";
+	scoresList.appendChild(scoreItem);
 
+	scores.push(dataObj);
+  
+	// save tasks to localStorage
+	saveScoresToStorage();
+  };
 
+  var saveScoresToStorage = function() {
+	localStorage.setItem("scores", JSON.stringify(scores));
+  };
+  
+
+scoreForm.addEventListener("submit", scoreSaver);
 
