@@ -1,55 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Code quiz</title>
-    <link rel="stylesheet" href="./assets/css/style.css" />
-  </head>
-  <body>
-   
-      <header>
-        <nav>
-          <p id="view-scores">View high scores</p>
-          <p id="view-time">Time: <span id="timer"></span></p>
-        </nav>
-        <h1 id="title">Coding quiz challenge</h1>
-        <button id="button-start" >Start</button>
-      </header>
 
-      <main>
-        <div id="main-container">
-          
-          <div id="choices-container"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Code quiz</title>
+  <link rel="stylesheet" href="./assets/css/style.css" />
+</head>
 
-          <div id="scores-form-container">
-            <h3>Your final score is <span id="print-score"></span></h3>
-            <form id="score-form">
-              <div class="form-group">
-                <h3>Enter initials: <span><input type="text" name="task-name" placeholder="Enter Task Name" /> <button id="save-score" type="submit">Submit</button></span></h3>
-              </div>
-            </form>
+<body>
+
+  <header>
+    <nav>
+      <p id="view-scores">View high scores</p>
+      <p id="view-time">Time: <span id="timer">0</span> sec.</p>
+    </nav>
+    <div id="start-page">
+      <h1 id="title-start">Coding quiz challenge</h1>
+      <button id="button-start">Start</button>
+    </div>
+
+  </header>
+
+  <main>
+    <div id="main-container">
+
+      <div id="choices-container">
+        <h1 id="title-question"></h1>
+        <div id="choices-buttons"></div>
+      </div>
+
+      <div id="scores-form-container">
+        <h1>All done!</h1>
+        <h3>Your final score is <span id="print-score"></span></h3>
+        <form id="score-form">
+          <div class="form-group">
+            <h3>Enter initials:
+              <span>
+                <input type="text" name="task-name"/>
+                <button id="save-score" type="submit">Submit</button>
+              </span>
+            </h3>
           </div>
+        </form>
+      </div>
 
-          <div id="scores-container">
-            <ul id="scores-list"></ul>
-            <button id="button-go-back">Go back</button>
-            <button id="button-clear-scores">Clear high scores</button>
-          </div>
-          
-          <div id="answer-container"></div>
-        </div>
+      <div id="scores-container">
+        <h1>High scores</h1>
+        <ul id="scores-list"></ul>
+        <button id="button-go-back">Go back</button>
+        <button id="button-clear-scores">Clear high scores</button>
+      </div>
 
-        
+      <div id="answer-container"></div>
 
+    </div>
 
-      </main>
-
-
-    <script src="./assets/js/script.js"></script>
-  </body>
-
-
+  </main>
+  <script src="./assets/js/script.js"></script>
+</body>
 
 </html>

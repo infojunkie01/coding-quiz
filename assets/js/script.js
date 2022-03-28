@@ -7,7 +7,7 @@ const questions = [
 			"booleans",
 			"alerts",
 			"numbers"
-		],		
+		],
 		answer: "alerts",
 	},
 	{
@@ -39,7 +39,7 @@ const questions = [
 			"parenthesis",
 		],
 		answer: "quotes",
-  },
+	},
 	{
 		question: "A very useful tool used during development and debugging for printing content to the debugger is:",
 		choices: [
@@ -52,147 +52,191 @@ const questions = [
 	}
 ];
 
-// Variables for selector
+// Selectors 
+startPage = document.querySelector('#start-page');
 buttonStart = document.querySelector('#button-start');
-title = document.querySelector('#title');
+titleQuestion = document.querySelector('#title-question');
 container = document.querySelector('#main-container');
 choicesContainer = document.querySelector('#choices-container');
+choicesButtons = document.querySelector('#choices-buttons');
 answerContainer = document.querySelector('#answer-container');
-scoresFormContainer = document.querySelector('#scores-form-container');
-printScore = document.querySelector('#print-score');
-scoresContainer = document.querySelector('#scores-container');
-scoresList = document.querySelector('#scores-list');
-scoreForm = document.querySelector("#score-form");
 
 score = 0;
 count = 0;
 
-
-// Create buttons for choices for each question
-function createChoices(count){
-  title.textContent = questions[count].question;
-  choicesContainer.innerHTML = '';
-  for (i=0; i<4; i++) {
-    buttonChoice = document.createElement('button');
-    buttonChoice.textContent = questions[count].choices[i];
-    buttonChoice.className = "button-choice";
-    buttonChoice.setAttribute("id", "choice"+ i);
-    choicesContainer.appendChild(buttonChoice); 
-  }
-}
-
-// Show final page when quiz end
-function finalPage(){
-	choicesContainer.innerHTML = '';
-	title.textContent = "All done!";
-	printScore.textContent = score;
-	scoresFormContainer.style.display = "block";
-}
-
 // When start button is clicked, present first question and start timer
-buttonStart.addEventListener("click", function() {
-	buttonStart.remove()
-    createChoices(count)
-	setInterval(timer, 1000); //1000 will  run it every 1 second
+buttonStart.addEventListener("click", function () {
+	startPage.style.display = "none";
+	choicesContainer.style.display = "block";
+	createChoices(count)
+	pageTimer = setInterval(timer, 1000);
 });
 
 // Sets up timer
-var timerCount = 76;
-	
-function timer(){
-	timerCount = timerCount-1;
-	if (timerCount < 0){
+timerCount = 76;
+function timer() {
+	timerCount = timerCount - 1;
+	if (timerCount < 0) {
+		clearInterval(pageTimer);
 		finalPage()
 		return;
-	} else if (count == questions.length){
-		clearInterval(timer);
-		document.getElementById("timer").innerHTML= "0 sec."; // watch for spelling
+	} else if (count == questions.length) {
+		clearInterval(pageTimer);
+		document.getElementById("timer").innerHTML = "0"; // watch for spelling
 		return;
+	} else {
+		document.getElementById("timer").innerHTML = timerCount; // watch for spelling
 	}
-	document.getElementById("timer").innerHTML = timerCount + " sec."; // watch for spelling
+
+}
+
+// Create buttons for choices for each question
+function createChoices(count) {
+	titleQuestion.textContent = questions[count].question;
+	choicesButtons.innerHTML = '';
+	for (i = 0; i < 4; i++) {
+		buttonChoice = document.createElement('button');
+		buttonChoice.textContent = questions[count].choices[i];
+		buttonChoice.className = "button-choice";
+		buttonChoice.setAttribute("id", "choice" + i);
+		choicesButtons.appendChild(buttonChoice);
+	}
+}
+
+// Show final page when quiz end
+function finalPage() {
+	choicesContainer.style.display = "none";
+	scoresFormContainer.style.display = "block";
+	printScore.textContent = score;
 }
 
 // Gives answer result
-function answerResult(feedback){
+function answerResult(feedback) {
 	answer = document.createElement('p');
 	answer.textContent = "Previous answer: " + feedback
 	answer.setAttribute("id", "answer");
-	answerContainer.appendChild(answer); 
+	answerContainer.appendChild(answer);
 }
 
-var choiceHandler = function(event) {
+var choiceHandler = function (event) {
 	var targetButton = event.target;
 	count++
-	console.log(count)
-	if (count < questions.length){
+	if (count < questions.length) {
 		answerContainer.innerHTML = '';
-		if (targetButton.textContent == questions[count-1].answer) {
+		if (targetButton.textContent == questions[count - 1].answer) {
 			createChoices(count);
 			answerResult("Correct!");
-			score++			
-		}else{
+			score++
+		} else {
 			createChoices(count);
 			timerCount = timerCount - 10; // Subtract time if answer is wrong
 			answerResult("Wrong");
 		};
-	}else{
-		if (targetButton.textContent == questions[count-1].answer) {
+	} else {
+		if (targetButton.textContent == questions[count - 1].answer) {
 			answer.innerHTML = '';
 			answerResult("Correct!");
-			score++		
-		}else{
+			score++
+		} else {
 			answer.innerHTML = '';
-			answerResult("Wrong")	
+			answerResult("Wrong")
 		};
 		finalPage();
 	}
-  };
-
-
-choicesContainer.addEventListener("click", choiceHandler);
-
-///
-
-var scoreSaver = function (event) {
-  event.preventDefault();
-  scoreName = document.querySelector("input[name='task-name']").value;
- 
-  if (!scoreName) {
-    alert("You need to fill out your name first!");
-    return false;
-  }
-
-  var dataObj = {
-	name: scoreName,
-	score: score
-	};
-
-  title.textContent = "High scores"
-  scoresFormContainer.style.display = "none";
-  answerContainer.style.display = "none";
-  scoresContainer.style.display = "block";
-  
-  createScore(dataObj)
 };
 
+
+choicesButtons.addEventListener("click", choiceHandler);
+
+// Selectors for #scores-form-container and #scores-container
+scoresFormContainer = document.querySelector('#scores-form-container');
+printScore = document.querySelector('#print-score');
+scoresContainer = document.querySelector('#scores-container');
+scoreForm = document.querySelector("#score-form");
+scoresList = document.querySelector('#scores-list');
+
+buttonGoBack = document.querySelector('#button-go-back')
+buttonClearScores = document.querySelector('#button-clear-scores')
+
+// Get name from user to store score
+var scoreSaver = function (event) {
+	event.preventDefault();
+	scoreName = document.querySelector("input[name='task-name']").value;
+    
+	if (!scoreName) {
+		alert("You need to fill out your name first!");
+		return false;
+	}
+
+	var dataObj = {
+		name: scoreName,
+		score: score
+	};
+
+	scoresFormContainer.style.display = "none";
+	answerContainer.style.display = "none";
+	scoresContainer.style.display = "block";
+	createScore(dataObj)
+};
+
+// Add saved score to list and save to local storage
 var scores = [];
+var createScore = function (dataObj) {
+	scores.push(dataObj); // push to scores array
+	scores.sort((a, b) => parseFloat(b.score) - parseFloat(a.score)); // Sorts scores from highest to lowest
+	saveScoresToStorage(); // save tasks to localStorage
 
-var createScore = function(dataObj) {
-	var scoreItem = document.createElement("li");
-	scoreItem.className = "score-info";
-	scoreItem.innerHTML = "<p>" + dataObj.name + " - " + dataObj.score + "</p>";
-	scoresList.appendChild(scoreItem);
+	scoresList.innerHTML = "";
+	for (i=0; i < scores.length; i++){
+		scoreItem = document.createElement("li");
+		scoreItem.className = "score-info";
+		scoreItem.setAttribute("data-index", scores[i].score )
+		scoreItem.innerHTML = "<p>" + scores[i].name + " - " + scores[i].score + "</p>";
+		scoresList.appendChild(scoreItem); // creates element for score saved
+	}
 
-	scores.push(dataObj);
-  
-	// save tasks to localStorage
-	saveScoresToStorage();
-  };
+};
 
-  var saveScoresToStorage = function() {
+var saveScoresToStorage = function () {
 	localStorage.setItem("scores", JSON.stringify(scores));
-  };
-  
+};
+
+var saveScoresToStorage = function () {
+	localStorage.setItem("scores", JSON.stringify(scores));
+};
 
 scoreForm.addEventListener("submit", scoreSaver);
 
+// Functions for back button and clear score button
+buttonGoBack.addEventListener("click", function () {
+	startPage.style.display = "block";
+	scoresContainer.style.display = "none";
+
+	//reset score, count, timer, and input field
+	score = 0;
+	count = 0;
+	timerCount = 76;
+	document.querySelector("input[name='task-name']").value = "";
+});
+
+buttonClearScores.addEventListener("click", function () {
+	scoresList.innerHTML = ''
+});
+
+// When 'view high scores' is clicked
+viewScores = document.querySelector('#view-scores');
+
+viewScores.addEventListener("click", function () {
+	scoresContainer.style.display = "block";
+	startPage.style.display = "none";
+	choicesContainer.style.display = "none";
+	answerContainer.style.display = "none";
+	scoresFormContainer.style.display = "none";
+
+	//reset score, count and timer
+	score = 0;
+	count = 0;
+	timerCount = 76;
+	clearInterval(pageTimer);
+	document.getElementById("timer").innerHTML = "0"; // watch for spelling
+})
