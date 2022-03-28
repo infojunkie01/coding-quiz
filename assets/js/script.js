@@ -61,6 +61,7 @@ choicesContainer = document.querySelector('#choices-container');
 choicesButtons = document.querySelector('#choices-buttons');
 answerContainer = document.querySelector('#answer-container');
 
+// Variables for score and count, these get reset later 
 score = 0;
 count = 0;
 
@@ -72,7 +73,7 @@ buttonStart.addEventListener("click", function () {
 	pageTimer = setInterval(timer, 1000);
 });
 
-// Sets up timer
+// Function for timer
 timerCount = 76;
 function timer() {
 	timerCount = timerCount - 1;
@@ -90,7 +91,7 @@ function timer() {
 
 }
 
-// Create buttons for choices for each question
+// Function creates buttons for choices for each question
 function createChoices(count) {
 	titleQuestion.textContent = questions[count].question;
 	choicesButtons.innerHTML = '';
@@ -103,14 +104,7 @@ function createChoices(count) {
 	}
 }
 
-// Show final page when quiz end
-function finalPage() {
-	choicesContainer.style.display = "none";
-	scoresFormContainer.style.display = "block";
-	printScore.textContent = score;
-}
-
-// Gives answer result
+// Function provides feedback on if answer was right or wrong
 function answerResult(feedback) {
 	answer = document.createElement('p');
 	answer.textContent = "Previous answer: " + feedback
@@ -118,6 +112,14 @@ function answerResult(feedback) {
 	answerContainer.appendChild(answer);
 }
 
+// Function shows score when quiz ends 
+function finalPage() {
+	choicesContainer.style.display = "none";
+	scoresFormContainer.style.display = "block";
+	printScore.textContent = score;
+}
+
+// Function cycles through quiz questions and saves scores as user goes through quiz
 var choiceHandler = function (event) {
 	var targetButton = event.target;
 	count++
@@ -145,8 +147,9 @@ var choiceHandler = function (event) {
 	}
 };
 
-
 choicesButtons.addEventListener("click", choiceHandler);
+
+
 
 // Selectors for #scores-form-container and #scores-container
 scoresFormContainer = document.querySelector('#scores-form-container');
@@ -180,7 +183,7 @@ var scoreSaver = function (event) {
 };
 
 // Add saved score to list and save to local storage
-var scores = [];
+scores = [];
 var createScore = function (dataObj) {
 	scores.push(dataObj); // push to scores array
 	scores.sort((a, b) => parseFloat(b.score) - parseFloat(a.score)); // Sorts scores from highest to lowest
@@ -201,11 +204,8 @@ var saveScoresToStorage = function () {
 	localStorage.setItem("scores", JSON.stringify(scores));
 };
 
-var saveScoresToStorage = function () {
-	localStorage.setItem("scores", JSON.stringify(scores));
-};
-
 scoreForm.addEventListener("submit", scoreSaver);
+
 
 // Functions for back button and clear score button
 buttonGoBack.addEventListener("click", function () {
@@ -218,9 +218,9 @@ buttonGoBack.addEventListener("click", function () {
 	timerCount = 76;
 	document.querySelector("input[name='task-name']").value = "";
 });
-
 buttonClearScores.addEventListener("click", function () {
-	scoresList.innerHTML = ''
+	scoresList.innerHTML = '';
+	scores = [];
 });
 
 // When 'view high scores' is clicked
